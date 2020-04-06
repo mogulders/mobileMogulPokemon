@@ -1,0 +1,21 @@
+.App {
+  text-align: center;
+}
+
+/* Play Screen */
+#playHeader {
+  text-align: center;
+  color: #2e3190;
+  font-size: 108px;
+}
+#playButton {
+  text-align: center;
+  font-size: 64px;
+  text-decoration: none;
+  border: solid;
+  border-width: 1px;
+}
+#playButton #playLink {
+  text-decoration: none;
+  padding: 1em;
+}
