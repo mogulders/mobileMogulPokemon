@@ -105,6 +105,27 @@ class App extends Component {
     this.setState({ activeComputerTrainer: this.state.mogulMob[0] });
   }
 
+  componentDidUpdate() {
+    if (
+      (this.state.userDeck.length >= 6) &
+      (this.state.page != SCREENS.BATTLE)
+    ) {
+      this.setState({
+        user: new Player(
+          this.state.userName,
+          false,
+          UserIMG,
+          this.state.userDeck
+        )
+      });
+      this.setState({ page: SCREENS.BATTLE });
+      this.setState({
+        details: "Choose one of your Pokemon by clicking on it"
+      });
+      return;
+    }
+  }
+
   handlePlay = () => {
     this.setState({ page: SCREENS.NAMESCREEN });
   };
@@ -164,28 +185,10 @@ class App extends Component {
     } else {
       console.log("that is not a pokemon");
     }
-    console.log(this.state.userDeck);
-    if (this.state.userDeck.length >= 6) {
-      this.setState({
-        user: new Player(
-          this.state.userName,
-          false,
-          UserIMG,
-          this.state.userDeck
-        )
-      });
-      this.setState({ page: SCREENS.BATTLE });
-      this.setState({
-        details: "Choose one of your Pokemon by clicking on it"
-      });
-      return;
-    }
   };
 
-  handleChoosePokemonForBattle = event => {
-    console.log(event.target);
-    this.setState({ activeUserPokemon: event.target.pokemon });
-    console.log(this.state.activeUserPokemon);
+  handleChoosePokemonForBattle = pokemon => {
+    this.setState({ activeUserPokemon: pokemon });
   };
 
   render() {
