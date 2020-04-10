@@ -4,8 +4,7 @@ export default function UserInputField(props) {
   return (
     <div>
       <p>{props.details}</p>
-      <input type="text"></input>
-      <button>Ok</button>
+      <button onClick={props.battle}>Battle</button>
     </div>
   );
 }

@@ -38,6 +38,9 @@ class App extends Component {
       details: "Choose your 6 Pokemon from the three",
       activeComputerTrainer: {},
       activeUserPokemon: {},
+      userMove: {},
+      computerMove:{},
+      activeComputerPokemon: {},
       userName: "",
       userDeck: [],
       user: {},
@@ -120,7 +123,7 @@ class App extends Component {
       });
       this.setState({ page: SCREENS.BATTLE });
       this.setState({
-        details: "Choose one of your Pokemon by clicking on it"
+        details: "Choose one of your Pokemon by clicking on it."
       });
       return;
     }
@@ -157,7 +160,7 @@ class App extends Component {
         userDeck: [
           ...this.state.userDeck,
           new Pokemon(
-            "blastoise",
+            "Blastoise",
             "water",
             "leaf",
             "water gun",
@@ -172,7 +175,7 @@ class App extends Component {
         userDeck: [
           ...this.state.userDeck,
           new Pokemon(
-            "venusaur",
+            "Venusaur",
             "leaf",
             "fire",
             "razor leaf",
@@ -189,6 +192,61 @@ class App extends Component {
 
   handleChoosePokemonForBattle = pokemon => {
     this.setState({ activeUserPokemon: pokemon });
+    this.computerChoosePokemon();
+    this.setState({ details: "Click Battle to attack the computer." });
+  };
+
+  computerChoosePokemon = () => {
+    let computerPokemon = this.state.activeComputerTrainer.deck[0];
+    console.log(computerPokemon);
+    this.setState({ activeComputerPokemon: computerPokemon });
+  };
+
+  battle = () => {
+    console.log("battling");
+    try{
+      this.userChooseMove();
+      this.computerChooseMove();
+      this.getAttackOrder();
+      this.checkFainted();
+    }catch{
+      console.log("You Must Choose  A Pokemon")}
+    
+  };
+
+  userChooseMove = () => {
+    this.setState({details: "Choose a move"})
+  };
+
+  computerChooseMove = () => {
+    this.setState({computerMove : this.state.activeComputerPokemon.moves.move2})
+  };
+
+  getAttackOrder = () => {
+    if(this.state.activeUserPokemon.type.weakness === this.state.activeComputerPokemon.type){
+      this.userAttacks();
+      this.computerAttacks();
+    }else{
+        this.computerAttacks()
+        this.userAttacks()
+      }
+    
+  };
+
+  computerAttacks = () => {
+    let userPokemon = this.state.activeUserPokemon
+    let adjustedPokemon = userPokemon.hp - this.state.computerMove.damage
+    this.setState({activeUserPokemon: adjustedPokemon})
+  };
+
+  userAttacks = () => {
+    let computerPokemon = this.state.activeUserPokemon
+    let adjustedPokemon = computerPokemon.hp - this.state.userMove.damage
+    this.setState({activeComputerPokemon: adjustedPokemon})
+  };
+
+  checkFainted = () => {
+    return;
   };
 
   render() {
@@ -257,12 +315,21 @@ class App extends Component {
           <ComputerPokemonLeft
             computerDeck={this.state.activeComputerTrainer.deck}
           ></ComputerPokemonLeft>
-          <ComputerPokemonHealth></ComputerPokemonHealth>
-          <UserBattlefield user={this.state.user}></UserBattlefield>
+          <ComputerPokemonHealth
+            pokemon={this.state.activeComputerPokemon}
+          ></ComputerPokemonHealth>
+          <UserBattlefield
+            user={this.state.user}
+            pokemon={this.state.activeUserPokemon}
+          ></UserBattlefield>
           <ComputerBattlefield
             computer={this.state.activeComputerTrainer}
+            pokemon={this.state.activeComputerPokemon}
           ></ComputerBattlefield>
-          <UserInputField details={this.state.details}></UserInputField>
+          <UserInputField
+            details={this.state.details}
+            battle={this.battle}
+          ></UserInputField>
         </Page>
 
         <Page page={SCREENS.WIN} currentPage={this.state.page}>

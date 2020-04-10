@@ -10,11 +10,11 @@ class Pokemon {
     };
     this.moves = {
       move1: {
-        moveName1: moveName1,
+        name: moveName1,
         damage: 40
       },
       move2: {
-        moveName2: moveName2,
+        name: moveName2,
         damage: 60
       }
     };
