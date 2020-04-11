@@ -16,6 +16,7 @@ import UserBattlefield from "./components/userBattlefield";
 import ComputerPokemonLeft from "./components/computerPokemonLeft";
 import ComputerPokemonHealth from "./components/computerPokemonHealth";
 import ComputerBattlefield from "./components/computerBattlefield";
+import MovesMenu from "./components/movesMenu";
 
 import "./App.css";
 
@@ -38,8 +39,10 @@ class App extends Component {
       details: "Choose your 6 Pokemon from the three",
       activeComputerTrainer: {},
       activeUserPokemon: {},
+      userMoveOption1: { name: "name", damage: 0 },
+      userMoveOption2: { name: "name", damage: 0 },
       userMove: {},
-      computerMove:{},
+      computerMove: {},
       activeComputerPokemon: {},
       userName: "",
       userDeck: [],
@@ -50,16 +53,16 @@ class App extends Component {
             "Charizard",
             "fire",
             "water",
-            "ember",
-            "flamethrower",
+            "Ember",
+            "Flamethrower",
             CharizardIMG
           ),
           new Pokemon(
             "Blastoise",
             "water",
             "leaf",
-            "water gun",
-            "hydro pump",
+            "Water Gun",
+            "Hydro Pump",
             BlastoiseIMG
           )
         ])),
@@ -68,16 +71,16 @@ class App extends Component {
             "blastoise",
             "water",
             "leaf",
-            "water gun",
-            "hydro pump",
+            "Water Gun",
+            "Hydro Pump",
             BlastoiseIMG
           ),
           new Pokemon(
             "charizard",
             "fire",
             "water",
-            "ember",
-            "flamethrower",
+            "Ember",
+            "Flamethrower",
             CharizardIMG
           )
         ])),
@@ -86,16 +89,16 @@ class App extends Component {
             "venusaur",
             " leaf",
             "fire",
-            "razor leaf",
-            "solar beam",
+            "Razor Leaf",
+            "Solar Beam",
             VenusaurIMG
           ),
           new Pokemon(
             "blastoise",
             "water",
             "leaf",
-            "water gun",
-            "hydro pump",
+            "Water Gun",
+            "Hydro Pump",
             BlastoiseIMG
           )
         ]))
@@ -148,8 +151,8 @@ class App extends Component {
             "Charizard",
             "fire",
             "water",
-            "ember",
-            "flamethrower",
+            "Ember",
+            "Flamethrower",
             CharizardIMG,
             this.state.userDeck.length
           )
@@ -178,8 +181,8 @@ class App extends Component {
             "Venusaur",
             "leaf",
             "fire",
-            "razor leaf",
-            "solar beam",
+            "Razor Leaf",
+            "Solar Beam",
             VenusaurIMG,
             this.state.userDeck.length
           )
@@ -194,6 +197,11 @@ class App extends Component {
     this.setState({ activeUserPokemon: pokemon });
     this.computerChoosePokemon();
     this.setState({ details: "Click Battle to attack the computer." });
+    this.setState({
+      userMoveOption1: pokemon.moves.move1,
+      userMoveOption2: pokemon.moves.move2
+    });
+    this.setState({ details: "Choose a move" });
   };
 
   computerChoosePokemon = () => {
@@ -202,51 +210,76 @@ class App extends Component {
     this.setState({ activeComputerPokemon: computerPokemon });
   };
 
-  battle = () => {
-    console.log("battling");
-    try{
-      this.userChooseMove();
-      this.computerChooseMove();
-      this.getAttackOrder();
-      this.checkFainted();
-    }catch{
-      console.log("You Must Choose  A Pokemon")}
-    
+  handleMoveSelection = move => {
+    this.setState({ userMove: move });
   };
 
-  userChooseMove = () => {
-    this.setState({details: "Choose a move"})
+  battle = () => {
+    console.log("battling");
+    try {
+      this.computerChooseMove();
+      this.attackInOrder();
+      // this.checkFainted();
+    } catch {
+      console.log("You Must Choose  A Pokemon");
+    }
   };
 
   computerChooseMove = () => {
-    this.setState({computerMove : this.state.activeComputerPokemon.moves.move2})
-  };
-
-  getAttackOrder = () => {
-    if(this.state.activeUserPokemon.type.weakness === this.state.activeComputerPokemon.type){
-      this.userAttacks();
-      this.computerAttacks();
-    }else{
-        this.computerAttacks()
-        this.userAttacks()
-      }
-    
+    this.setState({
+      computerMove: this.state.activeComputerPokemon.moves.move2
+    });
   };
 
   computerAttacks = () => {
-    let userPokemon = this.state.activeUserPokemon
-    let adjustedPokemon = userPokemon.hp - this.state.computerMove.damage
-    this.setState({activeUserPokemon: adjustedPokemon})
+    let userPokemon = this.state.activeUserPokemon;
+    let adjustedPokemon = userPokemon.hp - this.state.computerMove.damage;
+    this.setState({ activeUserPokemon: adjustedPokemon });
   };
 
   userAttacks = () => {
-    let computerPokemon = this.state.activeUserPokemon
-    let adjustedPokemon = computerPokemon.hp - this.state.userMove.damage
-    this.setState({activeComputerPokemon: adjustedPokemon})
+    let computerPokemon = this.state.activeUserPokemon;
+    let adjustedPokemon = computerPokemon.hp - this.state.userMove.damage;
+    this.setState({ activeComputerPokemon: adjustedPokemon });
+  };
+
+  attackInOrder = () => {
+    if (
+      this.state.activeUserPokemon.type.weakness ===
+      this.state.activeComputerPokemon.type.type
+    ) {
+      console.log("UserPokemon Goes First");
+      // this.userAttacks();
+      // this.checkFainted();
+      // this.computerAttacks();
+      // this.checkFainted();
+    } else {
+      console.log("Computer Pokemon Goes First");
+      // this.computerAttacks();
+      // this.checkFainted();
+      // this.userAttacks();
+      // this.checkFainted();
+    }
   };
 
   checkFainted = () => {
-    return;
+    if (this.state.activeUserPokemon.hp <= 0) {
+      let userDeck = this.state.user.deck;
+      let adjustedDeck = userDeck.forEach(pokemon => {
+        if (pokemon.id !== this.state.activeUserPokemon.id) {
+          adjustedDeck.push(pokemon);
+        }
+      });
+      // this.setState({user.deck:adjustedDeck})
+      return;
+    }
+
+    if (this.state.activeComputerPokemon.hp <= 0) {
+      let compDeck = this.state.activeComputerTrainer.deck;
+      let adjustedDeck = compDeck.shift();
+      // this.setState({this.mogulBraden.deck:adjustedDeck})
+      return;
+    }
   };
 
   render() {
@@ -318,6 +351,11 @@ class App extends Component {
           <ComputerPokemonHealth
             pokemon={this.state.activeComputerPokemon}
           ></ComputerPokemonHealth>
+          <MovesMenu
+            move1={this.state.userMoveOption1}
+            move2={this.state.userMoveOption2}
+            selectMove={this.handleMoveSelection}
+          ></MovesMenu>
           <UserBattlefield
             user={this.state.user}
             pokemon={this.state.activeUserPokemon}
