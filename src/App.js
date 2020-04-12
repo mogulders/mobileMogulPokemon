@@ -238,9 +238,10 @@ class App extends Component {
   };
 
   userAttacks = () => {
-    let computerPokemon = this.state.activeUserPokemon;
+    console.log("userAttacks");
+    let computerPokemon = this.state.activeComputerPokemon;
     let adjustedPokemon = computerPokemon.hp - this.state.userMove.damage;
-    this.setState({ activeComputerPokemon: adjustedPokemon });
+    this.setState({ ...this.state.activeComputerPokemon, hp: adjustedPokemon });
   };
 
   attackInOrder = () => {
@@ -249,7 +250,7 @@ class App extends Component {
       this.state.activeComputerPokemon.type.type
     ) {
       console.log("UserPokemon Goes First");
-      // this.userAttacks();
+      this.userAttacks();
       // this.checkFainted();
       // this.computerAttacks();
       // this.checkFainted();
@@ -257,7 +258,7 @@ class App extends Component {
       console.log("Computer Pokemon Goes First");
       // this.computerAttacks();
       // this.checkFainted();
-      // this.userAttacks();
+      this.userAttacks();
       // this.checkFainted();
     }
   };
@@ -286,12 +287,32 @@ class App extends Component {
     return (
       <div className="App">
         <Page page={SCREENS.MAIN} currentPage={this.state.page}>
-          <h1>Mobile Mogul Pokemon</h1>
-          <span id="playButton">
+          <h1 className="playHeader">Mobile Mogul Gym Battle</h1>
+          <span className="playButton">
             <a onClick={this.handlePlay} target="_blank" id="playLink">
               Play
             </a>
           </span>
+          <br></br>
+
+          <img
+            className="playPokemon"
+            src={CharizardIMG}
+            height="200"
+            width="auto"
+          ></img>
+          <img
+            className="playPokemon"
+            src={BlastoiseIMG}
+            height="200"
+            width="auto"
+          ></img>
+          <img
+            className="playPokemon"
+            src={VenusaurIMG}
+            height="200"
+            width="auto"
+          ></img>
         </Page>
 
         <Page page={SCREENS.NAMESCREEN} currentPage={this.state.page}>
