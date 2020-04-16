@@ -212,12 +212,12 @@ class App extends Component {
 
   handleMoveSelection = move => {
     this.setState({ userMove: move });
+    this.computerChooseMove();
   };
 
   battle = () => {
     console.log("battling");
     try {
-      this.computerChooseMove();
       this.attackInOrder();
       // this.checkFainted();
     } catch {
@@ -231,10 +231,25 @@ class App extends Component {
     });
   };
 
+  calcDamageMultiplier = (attacker, attacked) => {
+    if (attacker.type.type === attacked.type.weakness) {
+      return 2;
+    } else if (attacker.type.weakness === attacked.type.type) {
+      return 0.5;
+    } else {
+      return 1;
+    }
+  };
+
   computerAttacks = () => {
-    console.log("computerAttacks");
+    console.log("computer Attacks");
     let userPokemon = this.state.activeUserPokemon;
-    let adjustedPokemon = userPokemon.hp - this.state.userMove.damage;
+    let damageMultiplier = this.calcDamageMultiplier(
+      this.state.activeComputerPokemon,
+      userPokemon
+    );
+    let adjustedPokemon =
+      userPokemon.hp - damageMultiplier * this.state.computerMove.damage;
     this.setState({
       activeUserPokemon: {
         ...this.state.activeUserPokemon,
@@ -246,7 +261,12 @@ class App extends Component {
   userAttacks = () => {
     console.log("userAttacks");
     let computerPokemon = this.state.activeComputerPokemon;
-    let adjustedPokemon = computerPokemon.hp - this.state.userMove.damage;
+    let damageMultiplier = this.calcDamageMultiplier(
+      this.state.activeUserPokemon,
+      computerPokemon
+    );
+    let adjustedPokemon =
+      computerPokemon.hp - damageMultiplier * this.state.userMove.damage;
     this.setState({
       activeComputerPokemon: {
         ...this.state.activeComputerPokemon,
@@ -369,7 +389,6 @@ class App extends Component {
         </Page>
 
         <Page page={SCREENS.BATTLE} currentPage={this.state.page}>
-          <h1>Battle Screen</h1>
           <UserPokemonLeft
             userDeck={this.state.userDeck}
             choosePokemonForBattle={this.handleChoosePokemonForBattle}
@@ -383,15 +402,15 @@ class App extends Component {
           <ComputerPokemonHealth
             pokemon={this.state.activeComputerPokemon}
           ></ComputerPokemonHealth>
+          <UserBattlefield
+            user={this.state.user}
+            pokemon={this.state.activeUserPokemon}
+          ></UserBattlefield>
           <MovesMenu
             move1={this.state.userMoveOption1}
             move2={this.state.userMoveOption2}
             selectMove={this.handleMoveSelection}
           ></MovesMenu>
-          <UserBattlefield
-            user={this.state.user}
-            pokemon={this.state.activeUserPokemon}
-          ></UserBattlefield>
           <ComputerBattlefield
             computer={this.state.activeComputerTrainer}
             pokemon={this.state.activeComputerPokemon}
