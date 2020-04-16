@@ -49,6 +49,14 @@
   padding-top: 20px;
 }
 
+.welcomingP {
+  padding-left: 20%;
+  padding-right: 20%;
+  padding-top: 2.5%;
+  color: #555555;
+  font-weight: 500;
+}
+
 .moveMenu1 {
   /* border: solid; */
 }

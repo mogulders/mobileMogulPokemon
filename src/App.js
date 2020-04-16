@@ -232,16 +232,27 @@ class App extends Component {
   };
 
   computerAttacks = () => {
+    console.log("computerAttacks");
     let userPokemon = this.state.activeUserPokemon;
-    let adjustedPokemon = userPokemon.hp - this.state.computerMove.damage;
-    this.setState({ activeUserPokemon: adjustedPokemon });
+    let adjustedPokemon = userPokemon.hp - this.state.userMove.damage;
+    this.setState({
+      activeUserPokemon: {
+        ...this.state.activeUserPokemon,
+        hp: adjustedPokemon
+      }
+    });
   };
 
   userAttacks = () => {
     console.log("userAttacks");
     let computerPokemon = this.state.activeComputerPokemon;
     let adjustedPokemon = computerPokemon.hp - this.state.userMove.damage;
-    this.setState({ ...this.state.activeComputerPokemon, hp: adjustedPokemon });
+    this.setState({
+      activeComputerPokemon: {
+        ...this.state.activeComputerPokemon,
+        hp: adjustedPokemon
+      }
+    });
   };
 
   attackInOrder = () => {
@@ -251,33 +262,34 @@ class App extends Component {
     ) {
       console.log("UserPokemon Goes First");
       this.userAttacks();
-      // this.checkFainted();
-      // this.computerAttacks();
-      // this.checkFainted();
+      this.checkFainted();
+      this.computerAttacks();
+      this.checkFainted();
     } else {
       console.log("Computer Pokemon Goes First");
-      // this.computerAttacks();
-      // this.checkFainted();
+      this.computerAttacks();
+      this.checkFainted();
       this.userAttacks();
-      // this.checkFainted();
+      this.checkFainted();
     }
   };
 
   checkFainted = () => {
     if (this.state.activeUserPokemon.hp <= 0) {
-      let userDeck = this.state.user.deck;
-      let adjustedDeck = userDeck.forEach(pokemon => {
-        if (pokemon.id !== this.state.activeUserPokemon.id) {
-          adjustedDeck.push(pokemon);
-        }
-      });
-      // this.setState({user.deck:adjustedDeck})
+      // let userDeck = this.state.user.deck;
+      // let adjustedDeck = userDeck.forEach(pokemon => {
+      //   if (pokemon.id !== this.state.activeUserPokemon.id) {
+      //     adjustedDeck.push(pokemon);
+      //   }
+      console.log("userPokemon Fainted");
       return;
     }
+    // this.setState({user.deck:adjustedDeck})
 
     if (this.state.activeComputerPokemon.hp <= 0) {
-      let compDeck = this.state.activeComputerTrainer.deck;
-      let adjustedDeck = compDeck.shift();
+      console.log("computerPokemon Fainted");
+      // let compDeck = this.state.activeComputerTrainer.deck;
+      // let adjustedDeck = compDeck.shift();
       // this.setState({this.mogulBraden.deck:adjustedDeck})
       return;
     }
@@ -302,7 +314,8 @@ class App extends Component {
             width="auto"
           ></img>
           <img
-            className="playPokemon"
+            class
+            Name="playPokemon"
             src={BlastoiseIMG}
             height="200"
             width="auto"
@@ -316,8 +329,7 @@ class App extends Component {
         </Page>
 
         <Page page={SCREENS.NAMESCREEN} currentPage={this.state.page}>
-          <h1>Name Screen</h1>
-          <p>
+          <p className="welcomingP">
             Welcome to the Mobile Mogul Gym Battle. You will compete agaist the
             founding fathers of Mobile Mogul in a Pokemon Battle. Enter your
             name to start.
@@ -325,12 +337,11 @@ class App extends Component {
           <input type="text" id="nameText" placeholder="Name"></input>
           <button onClick={this.handleNameClick}>Next</button>
           <br></br>
-          <img src={UserIMG} height="150" width="auto"></img>
+          <img src={UserIMG} height="200" width="auto"></img>
         </Page>
 
         <Page page={SCREENS.CHOOSEPOKEMON} currentPage={this.state.page}>
-          <h1>Choose Pokemon Screen</h1>
-          {this.state.details}
+          <p className="details">{this.state.details}</p>
           <br></br>
           <img
             src={CharizardIMG}
