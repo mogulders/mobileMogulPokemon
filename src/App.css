@@ -57,10 +57,25 @@
   font-weight: 500;
 }
 
-.moveMenu1 {
-  /* border: solid; */
+.battlefield {
+  display: flex;
 }
 
-.moveMenu2 {
-  /* border: solid; */
+.userBattlefield {
+  flex: 2;
+}
+
+.movesMenu {
+  flex: 1;
+}
+
+.computerBattlefield {
+  flex: 2;
+}
+.userBattlePics {
+  display: flex;
+}
+
+.computerBattlePics {
+  display: flex;
 }

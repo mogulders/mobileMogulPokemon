@@ -20,8 +20,6 @@ import MovesMenu from "./components/movesMenu";
 
 import "./App.css";
 
-//trying to change this
-
 export const SCREENS = {
   MAIN: 0,
   NAMESCREEN: 1,
@@ -282,15 +280,24 @@ class App extends Component {
     ) {
       console.log("UserPokemon Goes First");
       this.userAttacks();
-      this.checkFainted();
-      this.computerAttacks();
-      this.checkFainted();
+      let fainted = this.checkFainted();
+      if (!fainted) {
+        this.computerAttacks();
+        this.checkFainted();
+      } else {
+        return;
+      }
     } else {
       console.log("Computer Pokemon Goes First");
       this.computerAttacks();
       this.checkFainted();
-      this.userAttacks();
-      this.checkFainted();
+      let fainted = this.checkFainted();
+      if (!fainted) {
+        this.userAttacks();
+        this.checkFainted();
+      } else {
+        return;
+      }
     }
   };
 
@@ -302,7 +309,7 @@ class App extends Component {
       //     adjustedDeck.push(pokemon);
       //   }
       console.log("userPokemon Fainted");
-      return;
+      return true;
     }
     // this.setState({user.deck:adjustedDeck})
 
@@ -311,7 +318,7 @@ class App extends Component {
       // let compDeck = this.state.activeComputerTrainer.deck;
       // let adjustedDeck = compDeck.shift();
       // this.setState({this.mogulBraden.deck:adjustedDeck})
-      return;
+      return true;
     }
   };
 
@@ -389,36 +396,48 @@ class App extends Component {
         </Page>
 
         <Page page={SCREENS.BATTLE} currentPage={this.state.page}>
-          <UserPokemonLeft
-            userDeck={this.state.userDeck}
-            choosePokemonForBattle={this.handleChoosePokemonForBattle}
-          ></UserPokemonLeft>
-          <UserPokemonHealth
-            pokemon={this.state.activeUserPokemon}
-          ></UserPokemonHealth>
-          <ComputerPokemonLeft
-            computerDeck={this.state.activeComputerTrainer.deck}
-          ></ComputerPokemonLeft>
-          <ComputerPokemonHealth
-            pokemon={this.state.activeComputerPokemon}
-          ></ComputerPokemonHealth>
-          <UserBattlefield
-            user={this.state.user}
-            pokemon={this.state.activeUserPokemon}
-          ></UserBattlefield>
-          <MovesMenu
-            move1={this.state.userMoveOption1}
-            move2={this.state.userMoveOption2}
-            selectMove={this.handleMoveSelection}
-          ></MovesMenu>
-          <ComputerBattlefield
-            computer={this.state.activeComputerTrainer}
-            pokemon={this.state.activeComputerPokemon}
-          ></ComputerBattlefield>
-          <UserInputField
-            details={this.state.details}
-            battle={this.battle}
-          ></UserInputField>
+          <div className="battlefield">
+            <div className="userBattlefield">
+              <UserPokemonLeft
+                userDeck={this.state.userDeck}
+                choosePokemonForBattle={this.handleChoosePokemonForBattle}
+              ></UserPokemonLeft>
+              <UserPokemonHealth
+                pokemon={this.state.activeUserPokemon}
+              ></UserPokemonHealth>
+              <UserBattlefield
+                user={this.state.user}
+                pokemon={this.state.activeUserPokemon}
+              ></UserBattlefield>
+              <h3>{this.state.user.name}</h3>
+            </div>
+
+            <div className="movesMenu">
+              <MovesMenu
+                move1={this.state.userMoveOption1}
+                move2={this.state.userMoveOption2}
+                selectMove={this.handleMoveSelection}
+              ></MovesMenu>
+              <UserInputField
+                details={this.state.details}
+                battle={this.battle}
+              ></UserInputField>
+            </div>
+
+            <div className="computerBattlefield">
+              <ComputerPokemonLeft
+                computerDeck={this.state.activeComputerTrainer.deck}
+              ></ComputerPokemonLeft>
+              <ComputerPokemonHealth
+                pokemon={this.state.activeComputerPokemon}
+              ></ComputerPokemonHealth>
+              <ComputerBattlefield
+                computer={this.state.activeComputerTrainer}
+                pokemon={this.state.activeComputerPokemon}
+              ></ComputerBattlefield>
+              <h3>{this.state.activeComputerTrainer.name}</h3>
+            </div>
+          </div>
         </Page>
 
         <Page page={SCREENS.WIN} currentPage={this.state.page}>
