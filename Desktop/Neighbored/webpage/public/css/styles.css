@@ -1,0 +1,287 @@
+body {
+  background-color: #f8f9fa;
+  color: #555555;
+
+  font-family: "Poppins", sans-serif !important;
+
+  text-align: center;
+}
+
+.navbar {
+  text-align: center !important;
+  background-color: #c6c6c6 !important;
+  padding-left: 10% !important;
+  padding-right: 10% !important;
+}
+
+.bggreen {
+  background-color: #3fb54f !important;
+  color: white !important;
+}
+.container {
+  text-align: center !important;
+  display: inline-block !important;
+}
+
+.navbar-brand {
+  display: inline-block !important;
+  color: white !important;
+  font-size: 64px !important;
+}
+
+.navbar-page {
+  text-decoration: none;
+  color: #f8f9fa;
+  font-size: 20px !important;
+  padding-left: auto !important;
+  padding-right: auto !important;
+}
+
+.navbar-page:hover {
+  text-decoration: none;
+  color: #555555;
+}
+
+.btn {
+  display: inline-block !important;
+  text-align: center;
+}
+
+.btn-primary {
+  background-color: #3fb54f !important;
+  border-color: #3fb54f !important;
+  font-size: 28px !important;
+  margin-top: 5% !important;
+  margin-bottom: 5% !important;
+}
+
+#footer {
+  padding: 1em 0 2em 0;
+  text-align: center;
+}
+
+#footer .inner {
+  width: 50%;
+  margin: 0 auto;
+}
+
+@media screen and (max-width: 980px) {
+  #footer .inner {
+    width: 75%;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  #footer .inner {
+    width: 90%;
+  }
+}
+
+@media screen and (max-width: 736px) {
+  #footer {
+    padding: 1em 0 1em 0;
+  }
+}
+
+/* List */
+
+ul {
+  list-style: disc;
+  margin: 0 0 2em 0;
+  padding-left: 1em;
+}
+
+ul li {
+  padding-left: 0.5em;
+}
+
+ul.alt {
+  list-style: none;
+  padding-left: 0;
+}
+
+ul.alt li {
+  border-top: solid 1px rgba(144, 144, 144, 0.25);
+  padding: 0.5em 0;
+}
+
+ul.alt li:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+ul.icons {
+  cursor: default;
+  list-style: none;
+  padding-left: 0;
+}
+
+ul.icons li {
+  display: inline-block;
+  text-align: center;
+  padding-left: 0;
+  padding-right: 1em;
+}
+
+ul.icons li a {
+  display: block;
+  border-radius: 100%;
+  margin: 0;
+  padding: 0.5em;
+  border: solid 1px rgba(144, 144, 144, 0.25);
+  color: rgba(144, 144, 144, 0.25);
+}
+
+ul.icons li a:before {
+  font-size: 1.5em;
+  display: block;
+  width: 1.5em;
+  height: 1.5em;
+  line-height: 1.5em;
+}
+
+ul.icons li a:hover {
+  background-color: #3fb54f;
+  color: #fff;
+}
+
+ul.icons li:last-child {
+  padding-right: 0;
+}
+
+/* Contact Us Fieldset */
+
+#form {
+  padding-top: 4em;
+}
+.contactInfo p {
+  padding: 0px;
+  margin: 0px;
+}
+
+.contactInfo ul > li {
+  list-style: none;
+  text-align: center;
+  padding-right: 4%;
+}
+
+.contactInfo #email {
+  text-decoration: none;
+  color: #3fb54f;
+}
+
+.contactInfo #website {
+  text-decoration: none;
+  color: #3fb54f;
+}
+
+.contactForm p {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.contactForm fieldset {
+  margin-right: 20%;
+  margin-left: 20%;
+  padding: 2em;
+  border: solid;
+  border-width: 1px;
+}
+
+.contactForm legend {
+  padding-right: 2em;
+  padding-left: 2em;
+  width: auto;
+}
+
+.contactForm #submit:hover {
+  color: #3fb54f;
+}
+
+.contactForm {
+  padding: 0px;
+  margin: 0px;
+}
+
+.modal-title {
+  text-align: center !important;
+}
+
+.btn-agree {
+  font-size: 12px !important;
+}
+
+.card {
+  margin: 4% auto !important;
+  background-color: #b49977 !important;
+}
+
+.card-img-top {
+  width: 40% !important;
+  align-self: center !important;
+  margin-top: 3% !important;
+}
+
+left-tab {
+  margin-left: 13% !important;
+}
+
+right-tab {
+  margin-right: 13% !important;
+}
+
+.FAQ {
+  margin-top: 10% !important;
+  padding-left: 10% !important;
+  padding-right: 10% !important;
+}
+
+.faq {
+  font-weight: 300% !important;
+  font-size: 16px !important;
+}
+
+.modal-body {
+  font-size: 12px !important;
+}
+
+.midheadie {
+  padding: 3.5%;
+}
+
+.resourceLink {
+  color: #3fb54f;
+}
+
+.resourceLink:hover {
+  text-decoration: none;
+  color: #555555;
+}
+
+.seeMore {
+  font-size: 12px !important;
+}
+
+.eulaBody {
+  background-color: #f8f9fa !important;
+  font-size: 10px !important;
+}
+
+.agreeLink {
+  text-decoration: none;
+  color: #f8f9fa;
+}
+.agreeLink:hover {
+  text-decoration: none;
+  color: #f8f9fa;
+}
+
+.downloadPicsIphone {
+  display: flex;
+  height: auto !important;
+  max-width: 80vh !important;
+}
+
+.iphoneDownloadPic {
+  flex: 1;
+}
