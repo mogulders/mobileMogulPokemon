@@ -122,9 +122,12 @@ class App extends Component {
           this.state.userDeck
         )
       });
-      this.setState({ page: SCREENS.BATTLE });
       this.setState({
-        details: "Choose one of your Pokemon by clicking on it."
+        page: SCREENS.BATTLE,
+        activeUserPokemon: this.state.userDeck[0],
+        activeComputerPokemon: this.state.activeComputerTrainer.deck[0],
+        userMoveOption1: this.state.userDeck[0].moves.move1,
+        userMoveOption2: this.state.userDeck[0].moves.move2
       });
       return;
     }
@@ -191,17 +194,6 @@ class App extends Component {
     }
   };
 
-  handleChoosePokemonForBattle = pokemon => {
-    this.setState({ activeUserPokemon: pokemon });
-    this.computerChoosePokemon();
-    this.setState({ details: "Click Battle to attack the computer." });
-    this.setState({
-      userMoveOption1: pokemon.moves.move1,
-      userMoveOption2: pokemon.moves.move2
-    });
-    this.setState({ details: "Choose a move" });
-  };
-
   computerChoosePokemon = () => {
     let computerPokemon = this.state.activeComputerTrainer.deck[0];
     console.log(computerPokemon);
@@ -211,16 +203,6 @@ class App extends Component {
   handleMoveSelection = move => {
     this.setState({ userMove: move });
     this.computerChooseMove();
-  };
-
-  battle = () => {
-    console.log("battling");
-    try {
-      this.attackInOrder();
-      // this.checkFainted();
-    } catch {
-      console.log("You Must Choose  A Pokemon");
-    }
   };
 
   computerChooseMove = () => {
@@ -239,86 +221,97 @@ class App extends Component {
     }
   };
 
-  computerAttacks = () => {
+  computerAttacks = (userPokemon, computerPokemon) => {
     console.log("computer Attacks");
-    let userPokemon = this.state.activeUserPokemon;
+
     let damageMultiplier = this.calcDamageMultiplier(
-      this.state.activeComputerPokemon,
+      computerPokemon,
       userPokemon
     );
-    let adjustedPokemon =
+    console.log(damageMultiplier);
+    let adjustedPokemonHealth =
       userPokemon.hp - damageMultiplier * this.state.computerMove.damage;
+    console.log(adjustedPokemonHealth);
     this.setState({
       activeUserPokemon: {
         ...this.state.activeUserPokemon,
-        hp: adjustedPokemon
+        hp: adjustedPokemonHealth
       }
     });
+    return adjustedPokemonHealth;
   };
 
-  userAttacks = () => {
+  userAttacks = (userPokemon, computerPokemon) => {
     console.log("userAttacks");
-    let computerPokemon = this.state.activeComputerPokemon;
+
     let damageMultiplier = this.calcDamageMultiplier(
-      this.state.activeUserPokemon,
+      userPokemon,
       computerPokemon
     );
-    let adjustedPokemon =
+    let adjustedPokemonHealth =
       computerPokemon.hp - damageMultiplier * this.state.userMove.damage;
     this.setState({
       activeComputerPokemon: {
         ...this.state.activeComputerPokemon,
-        hp: adjustedPokemon
+        hp: adjustedPokemonHealth
       }
     });
+    return adjustedPokemonHealth;
   };
 
   attackInOrder = () => {
-    if (
-      this.state.activeUserPokemon.type.weakness ===
-      this.state.activeComputerPokemon.type.type
-    ) {
+    let userPokemon = this.state.activeUserPokemon;
+    let computerPokemon = this.state.activeComputerPokemon;
+    if (userPokemon.type.weakness === computerPokemon.type.type) {
       console.log("UserPokemon Goes First");
-      this.userAttacks();
-      let fainted = this.checkFainted();
+      let adjustedComputerPokemonHealth = this.userAttacks(
+        userPokemon,
+        computerPokemon
+      );
+      let fainted = this.checkFainted(adjustedComputerPokemonHealth);
+      console.log("computerPokemonFainted?", fainted);
       if (!fainted) {
-        this.computerAttacks();
-        this.checkFainted();
+        let adjustedUserPokemonHealth = this.computerAttacks(
+          userPokemon,
+          computerPokemon
+        );
+        fainted = this.checkFainted(adjustedUserPokemonHealth);
+        console.log("userPokemonFainted?", fainted);
+        if (fainted) {
+          console.log("fainted", adjustedUserPokemonHealth);
+        }
       } else {
         return;
       }
     } else {
       console.log("Computer Pokemon Goes First");
-      this.computerAttacks();
-      this.checkFainted();
-      let fainted = this.checkFainted();
+      let adjustedUserPokemonHealth = this.computerAttacks(
+        userPokemon,
+        computerPokemon
+      );
+      let fainted = this.checkFainted(adjustedUserPokemonHealth);
+      console.log("userPokemonFainted?", fainted);
       if (!fainted) {
-        this.userAttacks();
-        this.checkFainted();
+        let adjustedComputerPokemonHealth = this.userAttacks(
+          userPokemon,
+          computerPokemon
+        );
+        fainted = this.checkFainted(adjustedComputerPokemonHealth);
+        console.log("computerPokemonFainted?", fainted);
+        if (fainted) {
+          console.log("fainted", adjustedComputerPokemonHealth);
+        }
       } else {
         return;
       }
     }
   };
 
-  checkFainted = () => {
-    if (this.state.activeUserPokemon.hp <= 0) {
-      // let userDeck = this.state.user.deck;
-      // let adjustedDeck = userDeck.forEach(pokemon => {
-      //   if (pokemon.id !== this.state.activeUserPokemon.id) {
-      //     adjustedDeck.push(pokemon);
-      //   }
-      console.log("userPokemon Fainted");
+  checkFainted = health => {
+    if (health <= 0) {
       return true;
-    }
-    // this.setState({user.deck:adjustedDeck})
-
-    if (this.state.activeComputerPokemon.hp <= 0) {
-      console.log("computerPokemon Fainted");
-      // let compDeck = this.state.activeComputerTrainer.deck;
-      // let adjustedDeck = compDeck.shift();
-      // this.setState({this.mogulBraden.deck:adjustedDeck})
-      return true;
+    } else {
+      return false;
     }
   };
 
@@ -420,7 +413,7 @@ class App extends Component {
               ></MovesMenu>
               <UserInputField
                 details={this.state.details}
-                battle={this.battle}
+                attackInOrder={this.attackInOrder}
               ></UserInputField>
             </div>
 

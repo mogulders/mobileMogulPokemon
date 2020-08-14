@@ -9,7 +9,6 @@ export default function UserPokemonLeft(props) {
           key={pokemon.id}
           height="50px"
           width="auto"
-          onClick={() => props.choosePokemonForBattle(pokemon)}
         ></img>
       ))}
     </div>
