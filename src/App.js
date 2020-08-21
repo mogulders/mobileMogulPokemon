@@ -3,6 +3,8 @@ import Player from "./Player";
 import Pokemon from "./Pokemon";
 import BlastoiseIMG from "./images/Blastoise.png";
 import CharizardIMG from "./images/Charizard.png";
+import Tyranitar from "./images/Tyranitar_Mega.gif";
+import DersPokemon from "./dersPokemon";
 import VenusaurIMG from "./images/Venusaur.png";
 import BradenIMG from "./images/bradenTrainer.png";
 import MeatballIMG from "./images/meatballTrainer.png";
@@ -40,6 +42,8 @@ class App extends Component {
       userMoveOption1: { name: "name", damage: 0 },
       userMoveOption2: { name: "name", damage: 0 },
       userMove: {},
+      userMissed: true,
+      computerMissed: true,
       computerMove: {},
       activeComputerPokemon: {},
       userName: "",
@@ -83,21 +87,13 @@ class App extends Component {
           )
         ])),
         (this.mogulDers = new Player("Mogul Ders", true, DersIMG, [
-          new Pokemon(
-            "venusaur",
-            " leaf",
-            "fire",
-            "Razor Leaf",
-            "Solar Beam",
-            VenusaurIMG
-          ),
-          new Pokemon(
-            "blastoise",
-            "water",
-            "leaf",
-            "Water Gun",
-            "Hydro Pump",
-            BlastoiseIMG
+          new DersPokemon(
+            "Tyranitar",
+            "Dark",
+            "",
+            "Crunch",
+            "Dark Pulse",
+            Tyranitar
           )
         ]))
       ]
@@ -201,6 +197,7 @@ class App extends Component {
   };
 
   handleMoveSelection = move => {
+    console.log(move);
     this.setState({ userMove: move });
     this.computerChooseMove();
   };
@@ -218,6 +215,34 @@ class App extends Component {
       return 0.5;
     } else {
       return 1;
+    }
+  };
+
+  checkUserHitOrMiss = () => {
+    var hitNumber = 10 * Math.random();
+    console.log("Check hit or miss ");
+    console.log(hitNumber);
+    if (this.state.userMove.damage > 50) {
+      if (hitNumber >= 5) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      if (hitNumber >= 3) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  };
+
+  checkComputerHitOrMiss = () => {
+    var hitNumber = 10 * Math.random();
+    if (hitNumber >= 5) {
+      return true;
+    } else {
+      return false;
     }
   };
 
@@ -259,50 +284,173 @@ class App extends Component {
     return adjustedPokemonHealth;
   };
 
+  handleUserFainted = userPokemon => {
+    console.log("handleUserFainted", userPokemon);
+    let userDeck = this.state.userDeck;
+    if (userDeck.length > 1) {
+      userDeck.shift();
+      console.log(userDeck);
+      this.setState({
+        userDeck: userDeck,
+        activeUserPokemon: userDeck[0],
+        userMoveOption1: userDeck[0].moves.move1,
+        userMoveOption2: userDeck[0].moves.move2
+      });
+    } else {
+      this.setState({ page: SCREENS.LOSE });
+    }
+  };
+
+  handleComputerFainted = computerPokemon => {
+    console.log("handleComputerFainted", computerPokemon);
+    let computerTrainer = this.state.activeComputerTrainer;
+    let mogulMob = this.state.mogulMob;
+    if (computerTrainer.deck.length > 1) {
+      let computerDeck = computerTrainer.deck;
+      computerDeck.shift();
+      this.setState({
+        activeComputerPokemon: computerDeck[0],
+        activeComputerTrainer: { ...computerTrainer, deck: computerDeck }
+      });
+      this.computerChooseMove();
+    } else if (mogulMob.length > 1) {
+      mogulMob.shift();
+      this.setState({
+        activeComputerTrainer: mogulMob[0],
+        activeComputerPokemon: mogulMob[0].deck[0],
+        mogulMob: mogulMob
+      });
+      this.computerChooseMove();
+    } else {
+      this.setState({ page: SCREENS.WIN });
+    }
+  };
+
   attackInOrder = () => {
     let userPokemon = this.state.activeUserPokemon;
     let computerPokemon = this.state.activeComputerPokemon;
+
+    //User Goes First
     if (userPokemon.type.weakness === computerPokemon.type.type) {
       console.log("UserPokemon Goes First");
-      let adjustedComputerPokemonHealth = this.userAttacks(
-        userPokemon,
-        computerPokemon
-      );
-      let fainted = this.checkFainted(adjustedComputerPokemonHealth);
-      console.log("computerPokemonFainted?", fainted);
-      if (!fainted) {
-        let adjustedUserPokemonHealth = this.computerAttacks(
-          userPokemon,
-          computerPokemon
-        );
-        fainted = this.checkFainted(adjustedUserPokemonHealth);
-        console.log("userPokemonFainted?", fainted);
-        if (fainted) {
-          console.log("fainted", adjustedUserPokemonHealth);
-        }
-      } else {
-        return;
-      }
-    } else {
-      console.log("Computer Pokemon Goes First");
-      let adjustedUserPokemonHealth = this.computerAttacks(
-        userPokemon,
-        computerPokemon
-      );
-      let fainted = this.checkFainted(adjustedUserPokemonHealth);
-      console.log("userPokemonFainted?", fainted);
-      if (!fainted) {
+      var wasHit = this.checkUserHitOrMiss();
+      console.log("washit", wasHit);
+      if (wasHit) {
+        this.setState({ userMissed: false });
         let adjustedComputerPokemonHealth = this.userAttacks(
           userPokemon,
           computerPokemon
         );
-        fainted = this.checkFainted(adjustedComputerPokemonHealth);
+        let fainted = this.checkFainted(adjustedComputerPokemonHealth);
         console.log("computerPokemonFainted?", fainted);
-        if (fainted) {
-          console.log("fainted", adjustedComputerPokemonHealth);
+        if (!fainted) {
+          var wasHit = this.checkComputerHitOrMiss();
+          console.log("washit", wasHit);
+
+          if (wasHit) {
+            this.setState({ computerMissed: false });
+            let adjustedUserPokemonHealth = this.computerAttacks(
+              userPokemon,
+              computerPokemon
+            );
+            fainted = this.checkFainted(adjustedUserPokemonHealth);
+            console.log("userPokemonFainted?", fainted);
+            if (fainted) {
+              console.log("fainted", adjustedUserPokemonHealth);
+              this.handleUserFainted(userPokemon);
+            } else {
+              return;
+            }
+          } else {
+            this.setState({ computerMissed: true });
+          }
+        } else {
+          this.handleComputerFainted(computerPokemon);
+          return;
         }
       } else {
-        return;
+        this.setState({ userMissed: true });
+        //wasnt hit
+        var wasHit = this.checkComputerHitOrMiss();
+        console.log("washit", wasHit);
+
+        if (wasHit) {
+          let adjustedUserPokemon = this.computerAttacks(
+            userPokemon,
+            computerPokemon
+          );
+          let fainted = this.checkFainted(adjustedUserPokemon);
+          console.log("fainted?", fainted);
+          if (fainted) {
+            this.handleUserFainted(userPokemon);
+          } else {
+            return;
+          }
+        }
+      }
+    }
+
+    //Computer Goes First
+    else {
+      console.log("Computer Pokemon Goes First");
+      var wasHit = this.checkComputerHitOrMiss();
+      console.log("washit", wasHit);
+
+      if (wasHit) {
+        this.setState({ computerMissed: false });
+        let adjustedUserPokemonHealth = this.computerAttacks(
+          userPokemon,
+          computerPokemon
+        );
+        let fainted = this.checkFainted(adjustedUserPokemonHealth);
+        console.log("userPokemonFainted?", fainted);
+        if (!fainted) {
+          var wasHit = this.checkUserHitOrMiss();
+          console.log("washit", wasHit);
+
+          if (wasHit) {
+            this.setState({ userMissed: false });
+            let adjustedComputerPokemonHealth = this.userAttacks(
+              userPokemon,
+              computerPokemon
+            );
+            fainted = this.checkFainted(adjustedComputerPokemonHealth);
+            console.log("computerPokemonFainted?", fainted);
+            if (fainted) {
+              console.log("fainted", adjustedComputerPokemonHealth);
+              this.handleComputerFainted(computerPokemon);
+            } else {
+              return;
+            }
+          } else {
+            this.setState({ userMissed: true });
+          }
+        } else {
+          this.handleUserFainted(userPokemon);
+          return;
+        }
+      } else {
+        this.setState({ computerMissed: true });
+        var wasHit = this.checkUserHitOrMiss();
+        console.log("washit", wasHit);
+
+        if (wasHit) {
+          this.setState({ userMissed: false });
+          let adjustedComputerPokemonHealth = this.userAttacks(
+            userPokemon,
+            computerPokemon
+          );
+          var fainted = this.checkFainted(adjustedComputerPokemonHealth);
+          console.log("computerPokemonFainted?", fainted);
+          if (fainted) {
+            console.log("fainted", adjustedComputerPokemonHealth);
+            this.handleComputerFainted(computerPokemon);
+          } else {
+            return;
+          }
+        } else {
+          this.setState({ userMissed: true });
+        }
       }
     }
   };
@@ -414,6 +562,9 @@ class App extends Component {
               <UserInputField
                 details={this.state.details}
                 attackInOrder={this.attackInOrder}
+                userMove={this.state.userMove}
+                userMissed={this.state.userMissed}
+                computerMissed={this.state.computerMissed}
               ></UserInputField>
             </div>
 
@@ -434,17 +585,17 @@ class App extends Component {
         </Page>
 
         <Page page={SCREENS.WIN} currentPage={this.state.page}>
-          <h1>Win Screen</h1>
           <img src={Badge}></img>
-          <p>
+          <p className="text">
             Congratulations! You have defeated the Mobile Mogul Gym, here is
             your MM Gym Badge!
           </p>
         </Page>
 
         <Page page={SCREENS.LOSE} currentPage={this.state.page}>
-          <h1>Lose Screen</h1>
-          <p>You have whited out refresh the screen to try again.</p>
+          <p className="text">
+            You have whited out refresh the screen to try again.
+          </p>
         </Page>
       </div>
     );

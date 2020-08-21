@@ -79,3 +79,7 @@
 .computerBattlePics {
   display: flex;
 }
+
+.text {
+  font-weight: 200;
+}
