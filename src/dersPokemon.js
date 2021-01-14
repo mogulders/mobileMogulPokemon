@@ -1,8 +1,8 @@
-class Pokemon {
+class DersPokemon {
   constructor(name, type, weakness, moveName1, moveName2, img, id) {
     this.name = name;
     this.img = img;
-    this.hp = 175;
+    this.hp = 375;
     this.id = id;
     this.type = {
       type: type,
@@ -16,7 +16,7 @@ class Pokemon {
       },
       move2: {
         name: moveName2,
-        damage: 60,
+        damage: 80,
         type: type
       }
     };
@@ -30,4 +30,4 @@ class Pokemon {
   }
 }
 
-export default Pokemon;
+export default DersPokemon;
