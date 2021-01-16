@@ -3,12 +3,7 @@ import Player from "./Player";
 import Pokemon from "./Pokemon";
 import BlastoiseIMG from "./images/Blastoise.png";
 import CharizardIMG from "./images/Charizard.png";
-import Tyranitar from "./images/Tyranitar_Mega.gif";
-import DersPokemon from "./dersPokemon";
 import VenusaurIMG from "./images/Venusaur.png";
-import BradenIMG from "./images/bradenTrainer.png";
-import MeatballIMG from "./images/meatballTrainer.png";
-import DersIMG from "./images/zandersTrainer.png";
 import UserIMG from "./images/userTrainer.png";
 import mogulMob from "./constants/mogulMob";
 import Badge from "./images/mobileMogulBadge.png";
@@ -43,7 +38,7 @@ class App extends Component {
             activeUserPokemon: {},
             userMoveOption1: { name: "name", damage: 0 },
             userMoveOption2: { name: "name", damage: 0 },
-            userMove: {},
+            userMove: "",
             userMissed: "false",
             computerMissed: "false",
             computerMove: {},
