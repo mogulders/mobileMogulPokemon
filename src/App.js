@@ -553,6 +553,12 @@ class App extends Component {
                                 userMissed={this.state.userMissed}
                                 computerMissed={this.state.computerMissed}
                                 faintedPokemon={this.state.faintedPokemon}
+                                user={this.state.user}
+                                userPokemon={this.state.activeUserPokemon}
+                                computer={this.state.activeComputerTrainer}
+                                computerPokemon={
+                                    this.state.activeComputerPokemon
+                                }
                             ></BottomDetails>
                         </div>
 

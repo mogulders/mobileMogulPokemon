@@ -6,15 +6,15 @@ const BottomDetails = (props) => {
             {props.userMissed === "false" ? null : (
                 <p>
                     {props.userMissed
-                        ? "User Pokemon Missed"
-                        : "User Pokemon Hit"}
+                        ? props.user.name + "'s Pokemon Missed"
+                        : props.user.name + "'s Pokemon Hit"}
                 </p>
             )}
             {props.computerMissed === "false" ? null : (
                 <p>
                     {props.computerMissed
-                        ? "Computer Pokemon Missed"
-                        : "Computer Pokemon Hit"}
+                        ? props.computer.name + "'s Pokemon Missed"
+                        : props.computer.name + "'s Pokemon Hit"}
                 </p>
             )}
             {props.faintedPokemon === "" ? (
