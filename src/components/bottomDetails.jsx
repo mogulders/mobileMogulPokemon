@@ -1,13 +1,9 @@
 import React from "react";
 
-export default function UserInputField(props) {
+const BottomDetails = (props) => {
     return (
         <div>
-            <p>
-                Choose a move and then press battle to attack once. Move 1 has a
-                better chance of landing. Move 2 does more damage
-            </p>
-            {/* {props.userMissed === "false" ? null : (
+            {props.userMissed === "false" ? null : (
                 <p>
                     {props.userMissed
                         ? "User Pokemon Missed"
@@ -25,8 +21,9 @@ export default function UserInputField(props) {
                 <p></p>
             ) : (
                 <p>{props.faintedPokemon.name} has fainted.</p>
-            )} */}
-            <button onClick={props.attackInOrder}>Battle</button>
+            )}
         </div>
     );
-}
+};
+
+export default BottomDetails;

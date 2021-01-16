@@ -22,6 +22,7 @@ import ComputerBattlefield from "./components/computerBattlefield";
 import MovesMenu from "./components/movesMenu";
 
 import "./App.css";
+import BottomDetails from "./components/bottomDetails";
 
 export const SCREENS = {
     MAIN: 0,
@@ -548,6 +549,11 @@ class App extends Component {
                                 computerMissed={this.state.computerMissed}
                                 faintedPokemon={this.state.faintedPokemon}
                             ></UserInputField>
+                            <BottomDetails
+                                userMissed={this.state.userMissed}
+                                computerMissed={this.state.computerMissed}
+                                faintedPokemon={this.state.faintedPokemon}
+                            ></BottomDetails>
                         </div>
 
                         <div className="computerBattlefield">
