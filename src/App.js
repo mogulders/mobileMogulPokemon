@@ -532,6 +532,7 @@ class App extends Component {
                             <MovesMenu
                                 move1={this.state.userMoveOption1}
                                 move2={this.state.userMoveOption2}
+                                userMove={this.state.userMove}
                                 selectMove={this.handleMoveSelection}
                                 userMissed={this.state.userMissed}
                                 computerMissed={this.state.computerMissed}
