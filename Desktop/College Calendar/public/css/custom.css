@@ -1,0 +1,19 @@
+/* your styles go here */
+
+.logoDiv {
+    background-color: #333333;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    display: flex;
+    border-radius: 40px;
+}
+
+.logoImg {
+    text-align: center;
+    margin-left: 15px;
+}
+
+.headerCompanyNameText {
+    margin-left: 15px;
+}
